@@ -1,0 +1,17 @@
+script(type='text/javascript')
+	$(document).ready(function() {
+		if (typeof bookmarksController.bookmarks !== 'undefined')
+			bookmarksController.bookmarks.reset(!{JSON.stringify(bookmarks)});
+	});
+#container
+	h2 Welcome #{name}
+	#page
+		button#add-bookmark Create new bookmark
+		| Url:
+		input#bookmark-url(type='text')
+		| Image Url:
+		input#bookmark-image-url(type='text')
+		| Private:
+		input#private-bookmark(type='checkbox')
+		#bookmarks
+			ul#bookmarks-list

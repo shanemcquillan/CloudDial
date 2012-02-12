@@ -1,49 +1,61 @@
-
-/**
- * Module dependencies.
- */
-
 var express = require('express'), 
     routes = require('./routes'), 
     mongoose = require('mongoose'),
-    everyauth = require('everyauth');
-    
-everyauth.debug = true;
+    everyauth = require('everyauth'); everyauth.debug = true;
 
 var app = module.exports = express.createServer();
-//mongoose.connect('mongodb://clouddial:clouddial@staff.mongohq.com:10085/clouddial');
+mongoose.connect('mongodb://127.0.0.1:27017/clouddial');
 
-var usersById = {};
-var nextUserId = 0;
+var User = require('./models/user.js').User;
 
-function addUser (source, sourceUser) {
-  var user;
-  if (arguments.length === 1) { // password-based
-    user = sourceUser = source;
-    user.id = ++nextUserId;
-    return (usersById[nextUserId] = user);
-  } else { // non-password-based
-    user = usersById[++nextUserId] = {id: nextUserId};
-    user[source] = sourceUser;
-  }
-  return user;
-}
-
-var usersByFbId = {};
 everyauth.facebook
   .appId('338275512873340')
   .appSecret('319e257dc1cb7ee64204f19fb51b42d8')
-  .findOrCreateUser( function (session, accessToken, accessTokenExtra, fbUserMetadata) {
-    return usersByFbId[fbUserMetadata.id] ||
-      (usersByFbId[fbUserMetadata.id] = addUser('facebook', fbUserMetadata));
+  .findOrCreateUser(function (session, accessToken, accessTokenExtra, fbUserMetadata) {
+      var promise = this.Promise();
+      findOrCreateByUidAndNetwork(fbUserMetadata.id, 'facebook', fbUserMetadata, promise);
+      return promise;
   })
-  .redirectPath('/' + everyauth.user);
+  .redirectPath('/');
+
+everyauth.everymodule
+  .findUserById(function(id, callback) {
+    fetchUserById(id, function (err, user) {
+      if (err) return callback(err);
+      callback(null, user);
+    });
+  });
+
+function findOrCreateByUidAndNetwork(uid, network, profile, promise) {
+  User.find({uid: uid, network: network}, function(err, users){
+    if(err) throw err;
+    if(users.length > 0) {
+      promise.fulfill(users[0]);
+    } else {
+      var user = new User();
+      user.network = network;
+      user.uid = uid;
+      user.username = profile.username;
+      user.bookmarks = {};
+      user.save(function(err){
+        if (err) throw err;
+        promise.fulfill(user);
+      });
+    }
+  });
+};
+
+function fetchUserById(id, callback) {
+  User.find({_id: id}, function(err, users){
+    callback(err, users[0]);
+  });
+}
 
 // Configuration
 app.configure(function(){
   app.set('views', __dirname + '/views');
   app.set('view engine', 'jade');
-  //app.set('view options', { layout: false });
+  app.use(express.logger());
   app.use(express.bodyParser());
   app.use(express.methodOverride());
   app.use(express.cookieParser());
@@ -54,7 +66,7 @@ app.configure(function(){
 });
 
 app.configure('development', function(){
-  app.use(express.errorHandler({ dumpExceptions: true, showStack: true })); 
+  app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
 });
 
 app.configure('production', function(){
@@ -63,8 +75,10 @@ app.configure('production', function(){
 
 // Routes
 app.get('/', routes.index);
+app.get('/user/*', routes.account);
+app.post('/save', routes.saveBookmark);
 
 everyauth.helpExpress(app);
 
-app.listen(process.env.C9_PORT);
+app.listen(4444);
 console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
