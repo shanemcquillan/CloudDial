@@ -8,4 +8,7 @@ html
 		script(src='/javascripts/libs/backbone-0.5.3.js')
 		script(src='/javascripts/libs/json2.js')
 	body!= body
+		-if(everyauth.loggedIn)
+			h3
+				a(href='/logout') Logout
 		script(src='/javascripts/clouddial.js')

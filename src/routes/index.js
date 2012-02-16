@@ -1,11 +1,12 @@
 var User = require('../models/user.js').User;
+var utils = require('../utils.js');
 
 //Home page or account page
 exports.index = function(req, res){
 	if (req.loggedIn){
 		res.redirect('/user/' + req.user._doc.username);
 	} else {
-	  res.render('index', { title: 'Cloud Dial' });
+		res.render('index');
 	}
 };
 
@@ -16,7 +17,12 @@ exports.account = function(req, res){
     if(users.length == 0) {
     	res.render('404');
   	} else {
-			res.render('account', { name: req.params[0], bookmarks: users[0]._doc.bookmarks });
+  		var viewableBMs = req.user
+  												? req.params[0] === req.user._doc.username 
+	  												? users[0]._doc.bookmarks 
+	  												: utils.filterPublic(users[0]._doc.bookmarks)
+  												: utils.filterPublic(users[0]._doc.bookmarks);
+			res.render('account', { name: req.params[0], bookmarks: viewableBMs });
   	}
 	});
 };
@@ -24,10 +30,18 @@ exports.account = function(req, res){
 exports.saveBookmark = function(req, res) {
 	User.update(
 		{ username: req.user._doc.username }, 
-		{ '$push': { bookmarks: { address: req.body.address, imgAddress: req.body.imgAddress } } },
-		{ upsert: true }, 
+		{ '$push': { bookmarks: { address: req.body.address, imgAddress: req.body.imgAddress, private: req.body.private } } },
+		{ upsert: true },
 		function(err){
       if (err) throw err;
     }
 	);
 };
+
+exports.saveScreen = function(req, res) {
+	if(req.loggedIn) {
+		res.render('savescreen', { title: req.query.title, address: req.query.address });
+	} else {
+	  res.render('index');
+	}
+}

@@ -3,6 +3,7 @@
 	Bookmark = Backbone.Model.extend({
 		address: null,
 		imgAddress: null,
+		private: false,
 
 		url: '/save',
 	
@@ -29,14 +30,6 @@
 		
 		deserialize : function(serialObj) {
 			return JSON.parse(serialObj);
-		}
-	});
-	
-//Private bookmark object
-	PrivateBookmark = Bookmark.extend({	//extends bookmark
-		//@Override
-		getBookmarkImgAddress: function() {
-			return '/images/private.jpg';
 		}
 	});
 	
@@ -91,9 +84,7 @@
 		addBookmark: function() {
 			var bookmarkUrl = $("#bookmark-url").val();
 			var bookmarkImageUrl = $("#bookmark-image-url").val();
-			var bookmark_model = $("#private-bookmark").is(":checked") //Is it a private bookmark?
-									? new PrivateBookmark({address: bookmarkUrl, imgAddress: bookmarkImageUrl}) 
-									: new Bookmark({address: bookmarkUrl, imgAddress: bookmarkImageUrl});
+			var bookmark_model = new Bookmark({address: bookmarkUrl, imgAddress: bookmarkImageUrl, private: $("#private-bookmark").is(":checked")});
 			this.bookmarks.add(bookmark_model);		//update model
 			bookmark_model.save();
 		},

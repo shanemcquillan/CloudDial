@@ -77,6 +77,7 @@ app.configure('production', function(){
 app.get('/', routes.index);
 app.get('/user/*', routes.account);
 app.post('/save', routes.saveBookmark);
+app.get('/savescreen', routes.saveScreen);
 
 everyauth.helpExpress(app);
 
