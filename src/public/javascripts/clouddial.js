@@ -3,34 +3,10 @@
 	Bookmark = Backbone.Model.extend({
 		address: null,
 		imgAddress: null,
+		tags: {},
 		private: false,
 
-		url: '/save',
-	
-		getBookmarkAddress: function() {
-			return this.get("address");
-		},
-	
-		getBookmarkImgAddress: function() {
-			return this.get("imgAddress");
-		},
-		
-		clone: function() {
-			return jQuery.extend(true, {}, this);
-		},
-		
-		equals: function(other) {
-			return _.isEqual(this, other);
-		},
-		
-		//Implementing serializable
-		serialize : function() {
-			return JSON.stringify(this);
-		},
-		
-		deserialize : function(serialObj) {
-			return JSON.parse(serialObj);
-		}
+		url: '/save'
 	});
 	
 //Bookmarks collection
@@ -48,23 +24,6 @@
 				console.log(this.at(i).attributes);
 			}
 		},
-
-		clone: function() {
-			return jQuery.extend(true, {}, this);
-		},
-		
-		equals: function(other) {
-			return _.isEqual(this, other);
-		},
-		
-		//Implementing serializable
-		serialize : function() {
-			return JSON.stringify(this);
-		},
-		
-		deserialize : function(serialObj) {
-			return JSON.parse(serialObj);
-		}
 	});
 
 //Bookmarks controller
@@ -78,20 +37,49 @@
 		},
 		
 		events: {
-			"click #add-bookmark": "addBookmark",		//Binds click on element add-bookmark to getValues
+			"click #add-bookmark": "addBookmark"		//Binds click on element add-bookmark to addBookmark
+			// "keypress #bookmark-tags": "addTag"
 		},
 		
 		addBookmark: function() {
 			var bookmarkUrl = $("#bookmark-url").val();
 			var bookmarkImageUrl = $("#bookmark-image-url").val();
-			var bookmark_model = new Bookmark({address: bookmarkUrl, imgAddress: bookmarkImageUrl, private: $("#private-bookmark").is(":checked")});
+			var allTags = $('#bookmark-tags').val().split(/, /);
+			var bookmark_model = new Bookmark({address: bookmarkUrl, imgAddress: bookmarkImageUrl, tags: allTags, private: $("#private-bookmark").is(":checked")});
 			this.bookmarks.add(bookmark_model);		//update model
 			bookmark_model.save();
+			FB.getLoginStatus(function(res) {
+				FB.api(
+					'/me/clouddial:add?' + 'access_token=' + res.authResponse.accessToken 
+					+ '&website=' + bookmark_model.get('address'),
+					'post',
+					function(response) {
+						if (!response || response.error) {
+								console.log('Error occured 2');
+						} else {
+								console.log('Cook was successful! Action ID: ' + response.id);
+						}
+					}
+				);
+				FB.api(
+					'/me/clouddial:add?' + 'access_token=' + res.authResponse.accessToken 
+					//+ '&website=' + bookmark_model.get('address')
+					+ '&article=' + bookmark_model.get('address'),
+					'post',
+					function(response) {
+						if (!response || response.error) {
+								console.log('Error occured 1');
+						} else {
+								console.log('Cook was successful! Action ID: ' + response.id);
+						}
+					}
+				);
+			});
 		},
 		
-		updateBookmarkView: function(model) {
+		updateBookmarkView: function(bookmark) {
 			//Update view with model values
-			$(this.el).append("<a href=\"" + model.getBookmarkAddress() + "\">" + "<img src=\"" + model.getBookmarkImgAddress() + "\"/></a>");
+			$(this.el).append("<a href=\"" + bookmark.get('address') + "\">" + "<img src=\"" + bookmark.get('imgAddress') + "\"/></a>");
 		},
 
 		updateAllBookmarksView: function() {
@@ -99,7 +87,13 @@
 				var bookmark = this.bookmarks.at(i);
 				$(this.el).append("<a href=\"" + bookmark.get('address') + "\">" + "<img src=\"" + bookmark.get('imgAddress') + "\"/></a>");
 			}
-		}
+		},
+
+		// addTag: function(event) {
+		// 	if(event.which == 188) {
+				
+		// 	}
+		// }
 	});
 	
 	var bookmarksController = new BookmarksController;	//Initialise controller

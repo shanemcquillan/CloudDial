@@ -1,9 +1,40 @@
+script(type='text/javascript')
+	window.fbAsyncInit = function() {
+		FB.init({
+			appId      : '359665827407633', // App ID
+			status     : true, // check login status
+			cookie     : true, // enable cookies to allow the server to access the session
+			xfbml      : true  // parse XFBML
+		});
+	};
+	// Load the SDK Asynchronously
+	(function(d){
+		var js, id = 'facebook-jssdk'; if (d.getElementById(id)) {return;}
+		js = d.createElement('script'); js.id = id; js.async = true;
+		js.src = "http://connect.facebook.net/en_US/all.js";
+		d.getElementsByTagName('head')[0].appendChild(js);
+	}(document));
 h1=title
 #page
+	#fb-root
 	button#add-bookmark Create new bookmark
-	| Url:
-	input#bookmark-url(type='text', value=address)
-	| Image Url:
-	input#bookmark-image-url(type='text')
-	| Private:
-	input#private-bookmark(type='checkbox')
+	#url Url:
+		input#bookmark-url(type='text', value=address)
+	#imgUrl Image Url:
+		input#bookmark-image-url(type='text')
+		#sugg-images-pop Popular images
+			each image in pop_images
+				img(src=image)
+		#sugg-images-top Suggested images
+			each image in goog_images
+				img(src=image)
+	#tag-sec Tags:
+		input#bookmark-tags(type='text')
+		#sugg-tags-pop Popular tags
+			each tag in pop_tags
+				li= tag
+		#sugg-tags-top Suggested tags
+			each tag in top_tags
+				li= tag.term
+	#priv Private:
+		input#private-bookmark(type='checkbox')

@@ -1,11 +1,20 @@
 {
-    "name": "application-name"
-  , "version": "0.0.1"
-  , "private": true
-  , "dependencies": {
-      "express": "2.5.2"
-    , "jade": ">= 0.0.1"
-    , "everyauth": "0.2.29"
-    , "mongoose": "2.5.2"
-  }
+	"name": "clouddial",
+	"decription": "Cloud based visual bookmarking service.",
+	"version": "0.0.1",
+	"author": "Shane McQuillan <shanemcquillan@live.com>",
+	"private": true,
+	"dependencies": {
+		"bindings": "0.3.0",
+		"contextify": "0.1.1",
+		"everyauth": "0.2.29",
+		"express": "2.5.2",
+		"jade": "0.20.0",
+		"jsdom": "0.2.13",
+		"mongoose": "2.5.2",
+		"request": "2.9.100"
+	},
+	"keywords": ["cloud", "dial", "visual", "image", "bookmark"],
+	"repository": "git://github.com/shanedownfall/clouddial",
+	"engines": { "node": ">= 0.4.1 < 0.7.0" }
 }

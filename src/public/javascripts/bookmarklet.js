@@ -6,7 +6,7 @@ javascript:
 			+'&address='
 			+encodeURIComponent(window.location.href);
 		a = function() {
-				if(!window.open(f+'noui=1&jump=doclose','deliciousuiv6','location=yes,links=no,scrollbars=no,toolbar=no,width=550,height=550'))
+				if(!window.open(f/*+'noui=1&jump=doclose'*/,'deliciousuiv6','location=yes,links=no,scrollbars=no,toolbar=no,width=550,height=550'))
 					location.href = f + 'jump=yes'
 			};
 		if(/Firefox/.test(navigator.userAgent)) {
