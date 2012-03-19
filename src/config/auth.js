@@ -2,8 +2,8 @@ module.exports = function(everyauth, app) {
 	var user = require('../models/user.js');
 
 	everyauth.facebook
-		.appId('359665827407633')
-		.appSecret('0576adf85837ce83b97f509d34f574f2')
+		.appId(config.fb_id)
+		.appSecret(config.fb_secret)
 		.scope('publish_actions')
 		.findOrCreateUser(function (session, accessToken, accessTokenExtra, fbUserMetadata) {
 				var promise = this.Promise();

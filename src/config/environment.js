@@ -8,8 +8,9 @@ module.exports = function(app, express, everyauth) {
 		app.use(express.cookieParser());
 		app.use(express.session({ secret: 'cdsecret' }));
 		app.use(everyauth.middleware());
-		app.use(app.router);
 		app.use(express.static(__dirname + '/../public'));
+		app.use(app.router);
+
 	});
 
 	app.configure('development', function(){

@@ -3,7 +3,7 @@ var net = require('net'),
 		jsdom = require('jsdom');
 
 exports.getTopTerms = function(webpage, callback) {
-	var client = net.connect(8124, function() { //'connect' listener
+	var client = net.connect(config.tw_port, function() { //'connect' listener
 		console.log('client connected');
 		request(webpage, function(error, response, body) {
 			jsdom.env({

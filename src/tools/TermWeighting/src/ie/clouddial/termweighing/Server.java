@@ -12,7 +12,7 @@ public class Server
 	{
         ServerSocket serverSocket = null;		// The server socket, connections arrive here
 		ExecutorService pool = null;			//Thread pool
-		
+
         try 
 		{
             serverSocket = new ServerSocket(8124);
