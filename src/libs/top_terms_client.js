@@ -32,4 +32,8 @@ exports.getTopTerms = function(webpage, callback) {
 	client.on('end', function() {
 		console.log('client disconnected');
 	});
+
+	client.on('error', function() {
+		callback(new Array());
+	})
 }

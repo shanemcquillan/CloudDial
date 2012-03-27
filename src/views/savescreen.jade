@@ -14,27 +14,36 @@ script(type='text/javascript')
 		js.src = "http://connect.facebook.net/en_US/all.js";
 		d.getElementsByTagName('head')[0].appendChild(js);
 	}(document));
+
+	$(document).ready(function() {
+		window.app = new App();
+	});
+
 h1=title
 #page
 	#fb-root
 	button#add-bookmark Create new bookmark
-	#url Url:
+	div Url:
 		input#bookmark-url(type='text', value=address)
-	#imgUrl Image Url:
+	div Image Url:
 		input#bookmark-image-url(type='text')
-		#sugg-images-pop Popular images
+		div Popular images
 			each image in pop_images
 				img(src=image)
-		#sugg-images-top Suggested images
+		div Suggested images
 			each image in goog_images
 				img(src=image)
-	#tag-sec Tags:
+	div Tags:
 		input#bookmark-tags(type='text')
-		#sugg-tags-pop Popular tags
+		div Popular tags
 			each tag in pop_tags
 				li= tag
-		#sugg-tags-top Suggested tags
+		div Suggested tags
 			each tag in top_tags
 				li= tag.term
-	#priv Private:
+	div Private:
 		input#private-bookmark(type='checkbox')
+	div Group:
+		select#group-name
+			each name in groups
+				option= name

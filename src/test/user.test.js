@@ -32,33 +32,77 @@ describe('Users', function(){
 	});
 
 	it('adding bookmark to user', function(done){
-		user.addBookmark('test', {'address': 'www.test.com', 'imgAddress': 'www.testimage.com', 'tags': ['test1', 'test2'], 'private': false}, function(err){
-			user.findUserByUsername('test', function(er, usr){
-				usr._doc.bookmarks[0].address.should.equal('www.test.com');
-				usr._doc.bookmarks[0].imgAddress.should.equal('www.testimage.com');
-				usr._doc.bookmarks[0].tags[0].should.equal('test1');
-				usr._doc.bookmarks[0].tags[1].should.equal('test2');
+		user.addBookmark('test', 'home', {'address': 'www.test.com', 'imgAddress': 'www.testimage.com', 'tags': ['test1', 'test2'], 'private': false}, function(err){
+			user.getGroup('test', 'home', function(err, grp){
+				grp.bookmarks[0].address.should.equal('www.test.com');
+				grp.bookmarks[0].imgAddress.should.equal('www.testimage.com');
+				grp.bookmarks[0].tags[0].should.equal('test1');
+				grp.bookmarks[0].tags[1].should.equal('test2');
 				done();
 			});
 		});
 	});
 	
 	it('gets public bookmarks only', function(done){
-		user.addBookmark('test', {'address': 'www.test.com', 'imgAddress': 'www.testimage.com', 'tags': ['test1'], 'private': false}, function(err){
-			user.addBookmark('test', {'address': 'www.test2.com', 'imgAddress': 'www.testimage.com', 'tags': ['test1'], 'private': true}, function(err){
+		user.addBookmark('test', 'home', {'address': 'www.test.com', 'imgAddress': 'www.testimage.com', 'tags': ['test1'], 'private': false}, function(err){
+			user.addBookmark('test', 'home', {'address': 'www.test2.com', 'imgAddress': 'www.testimage.com', 'tags': ['test1'], 'private': true}, function(err){
 				user.getBookmarks(
 					'test', 
-					function(bkmrk) {
-						return !bkmrk.private;
+					function(grp) {
+						var bookmarks = new Array();
+						grp.bookmarks.forEach(function(bkmrk){
+							if(!bkmrk.private) {
+								bookmarks.push(bkmrk);
+							}
+						})
+						grp.bookmarks = bookmarks;
+						return !grp.private;
 					}, 
-					function(bkmrks) {
-						bkmrks.length.should.equal(1);
-						bkmrks[0].address.should.equal('www.test.com');
+					function(grps) {
+						grps[0].bookmarks.length.should.equal(1);
+						grps[0].bookmarks[0].address.should.equal('www.test.com');
 						done();
 					}
 				);
 			});	
 		});		
+	});
+
+	it('adding bookmarks to other groups', function(done){
+		user.addGroup('test', 'another', function(err){
+			user.addBookmark('test', 'home', {'address': 'www.test.com', 'imgAddress': 'www.testimage.com', 'tags': ['test1'], 'private': false}, function(err){
+				user.addBookmark('test', 'another', {'address': 'www.test2.com', 'imgAddress': 'www.testimage.com', 'tags': ['test1'], 'private': true}, function(err){
+					user.getBookmarks(
+						'test', 
+						function(grp){
+							return true;
+						}, 
+						function(grps){
+							grps.length.should.equal(2);
+							grps[0].bookmarks.length.should.equal(1);
+							grps[0].bookmarks[0].address.should.equal('www.test.com');
+							grps[1].bookmarks.length.should.equal(1);
+							grps[1].bookmarks[0].address.should.equal('www.test2.com');
+							done();
+						}
+					);
+				});	
+			});
+		});	
+	});
+
+	it('getting group names', function(done){
+		user.addGroup('test', 'another', function(err){
+			user.addBookmark('test', 'home', {'address': 'www.test.com', 'imgAddress': 'www.testimage.com', 'tags': ['test1'], 'private': false}, function(err){
+				user.addBookmark('test', 'another', {'address': 'www.test2.com', 'imgAddress': 'www.testimage.com', 'tags': ['test1'], 'private': true}, function(err){
+					user.getGroupNames('test', function(grpNames) {
+						grpNames[0].should.equal('home');
+						grpNames[1].should.equal('another');
+						done();
+					});
+				});	
+			});
+		});	
 	});
 
 	it('get bookmarks of non existing user', function(done){

@@ -1,10 +1,16 @@
-script(type='text/javascript')
+script
 	$(document).ready(function() {
-		if (typeof bookmarksController.bookmarks !== 'undefined')
-			bookmarksController.bookmarks.reset(!{JSON.stringify(bookmarks)});
+		var app = new App(!{groups});
 	});
+
 #container
 	h2 Welcome #{name}
 	#page
+		button#add-group Create new group
+		div Group name:
+			input#group-name(type='text')
+		button#search Submit
+		div Search:
+			input#search-terms(type='text')
+		#groups
 		#bookmarks
-			ul#bookmarks-list

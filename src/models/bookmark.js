@@ -117,9 +117,11 @@ var Bookmark = function() {
 		getBookmarkImages: function(address, callback) {
 			this.findByAddress(address, function(err, bkmrk){
 				var orderedImgAddresses = new Array();
-				var imgAddresses = bkmrk._doc.imgAddresses.sort(function(a, b) { return a.amount > b.amount ? -1 : 1 });
-				for(var i = 0; i < imgAddresses.length; i++) {
-					orderedImgAddresses.push(imgAddresses[i].address);
+				if(bkmrk) {
+					var imgAddresses = bkmrk._doc.imgAddresses.sort(function(a, b) { return a.amount > b.amount ? -1 : 1 });
+					for(var i = 0; i < imgAddresses.length; i++) {
+						orderedImgAddresses.push(imgAddresses[i].address);
+					}
 				}
 				callback(orderedImgAddresses);
 			});
@@ -128,9 +130,11 @@ var Bookmark = function() {
 		getBookmarkTags: function(address, callback) {
 			this.findByAddress(address, function(err, bkmrk){
 				var orderedTags = new Array();
-				var tags = bkmrk._doc.tags.sort(function(a, b) { return a.amount > b.amount ? -1 : 1 });
-				for(var i = 0; i < tags.length; i++) {
-					orderedTags.push(tags[i].tag);
+				if(bkmrk) {
+					var tags = bkmrk._doc.tags.sort(function(a, b) { return a.amount > b.amount ? -1 : 1 });
+					for(var i = 0; i < tags.length; i++) {
+						orderedTags.push(tags[i].tag);
+					}
 				}
 				callback(orderedTags);
 			});
