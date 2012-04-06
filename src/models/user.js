@@ -14,7 +14,7 @@ var User = function() {
 		name: {'type': String, 'required': true},
 		bookmarks: {'type': [BookmarkSchema], 'required': false},
 		// subgroups: {'type': [SubgroupSchema], 'required': false},
-		private: {'type': Boolean, 'required': false}
+		private: {'type': Boolean, 'required': false},
 		default: {'type': Boolean, 'required': false}
 	});
 

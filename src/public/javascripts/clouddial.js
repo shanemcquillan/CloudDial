@@ -1,4 +1,44 @@
-(function () {	//self invoking anonymous function - ensures page has loaded correctly		
+(function () {	//self invoking anonymous function - ensures page has loaded correctly
+
+	Tag = Backbone.Model.extend({
+		initialize: function(tg) {
+			_.bindAll(this);
+			this.tag = tg.tag;
+			this.amount = tg.amount;
+		}
+	});
+
+	Tags = Backbone.Collection.extend({
+		initialize: function(controller) {}
+	});
+
+	TagsController = Backbone.Collection.extend({
+		el: $('#tags'),
+
+		template: _.template($('#tag-template').html()),
+
+		initialize: function(tgs) {
+			_.bindAll(this);
+			this.tags = new Tags(this);
+
+			var self = this;
+			tgs.forEach(function(tg){
+				self.tags.add(new Tag(tg));
+			});
+		},
+
+		render: function(tg) {
+			$(this.el).append(this.template({'tag': tg.get('tag'), 'amount': tg.get('amount')}));
+		},
+
+		showAll: function() {
+			$(this.el).empty();
+			var self = this;
+			this.tags.forEach(function(tg){
+				self.render(tg);
+			});
+		}
+	});
 
 	Bookmark = Backbone.Model.extend({
 		url: '/bookmark',
@@ -20,6 +60,34 @@
 		initialize: function(controller) {
 			_.bindAll(this);	//Binding BookmarksView to 'this' (because of javascript's dynamic scoping) 
 			this.bind('add', controller.render);	//Binding Bookmarks add method to addBookmark
+		},
+
+		getTags: function(exclude) {	
+			//Returns all tags from collection in order of popularity, excluding those in 'exclude'
+			var tempTags = {};
+			this.forEach(function(bkmrk){
+				bkmrk.get('tags').forEach(function(tg){
+					if(!tempTags[tg]) {		//If tag is not added
+						tempTags[tg] = { 'tag': tg, 'amount': 1 };
+					} else {
+						tempTags[tg].amount++;
+					}
+				});
+			});
+
+			//Removing those in the original search
+			for(var i = 0; i < exclude.length; i++) {
+				delete tempTags[exclude[i]];
+			}
+
+			//Creating final array
+			var tgs = new Array();
+			for(var prop in tempTags) {
+				tgs.push(tempTags[prop]);
+			}
+			tgs.sort(function(a,b){ return a.amount > b.amount ? -1 : 1 });
+
+			return new TagsController(tgs);
 		}
 	});
 
@@ -27,13 +95,12 @@
 		el: $('#bookmarks'),
 		
 		initialize: function(bkmrks, options) {
-			_.bindAll(this, 'render');
+			_.bindAll(this, 'add', 'render', 'showAll');
 			this.bookmarks = new Bookmarks(this);	//Initialises model with itself (controller) as parameter
-		
+
 			var self = this;
 			bkmrks.forEach(function(bkmrk){
-				var bk = new Bookmark(bkmrk);
-				self.bookmarks.add(bk, options);
+				self.add(new Bookmark(bkmrk), options);
 			});
 		},
 
@@ -41,6 +108,10 @@
 
 		render: function(bkmrk) {
 			$(this.el).append(this.template({'address': bkmrk.get('address'), 'imgAddress': bkmrk.get('imgAddress')}));
+		},
+
+		add: function(bkmrk, options) {
+			this.bookmarks.add(new Bookmark(bkmrk), options);
 		},
 
 		showAll: function() {
@@ -60,6 +131,7 @@
 			//First time group is initialised groupcontroller is passed
 			this.bookmarksController = new BookmarksController(group.bookmarks ? group.bookmarks : new Array(), {silent: group.default ? false : true});
 			this.name = group.name;
+			this.selected = group.default ? group.default : false;
 		},
 
 		show: function() {
@@ -85,17 +157,31 @@
 	
 			var self = this;
 			grps.forEach(function(grp) {
-				var gr = new Group(grp);
-				self.groups.add(gr);
+				self.groups.add(new Group(grp));
 			})
 		},
 
 		template: _.template($('#group-template').html()),
 
 		render: function(grp) {
-			var grpDiv = $(this.template({'name': grp.get('name')}));
-			grpDiv.click(grp.show);
+			var self = this;
+			var name = grp.get('name');
+			var grpDiv = $(this.template({'name': name}));
+			grpDiv.click(function() {
+				grp.show();
+				self.groups.forEach(function(gr){
+					gr.selected = gr.get('name') === name;
+				});
+			});
 			$(this.el).append(grpDiv);
+		},
+
+		addBookmark: function(grp, bkmrk) {
+			this.groups.forEach(function(gr){
+				if(gr.get('name') === grp) {
+					gr.bookmarksController.add(bkmrk, {'silent': !gr.selected});
+				}
+			});
 		}
 	});
 	
@@ -109,7 +195,7 @@
 		},
 
 		initialize: function(grps) {
-			if(grps) this.groups = new GroupsController(grps);
+			if(grps) this.groupsController = new GroupsController(grps);
 		},
 
 		addBookmark: function() {
@@ -120,7 +206,8 @@
 			var priv = $('#private-bookmark').is(':checked');
 			var bkmrkInfo = {address: bookmarkUrl, imgAddress: bookmarkImageUrl, tags: allTags, private: priv};
 			var bookmark_model = new Bookmark(bkmrkInfo);
-			bookmark_model.save({group: $('#group-name :selected').text()});
+			var group_name = $('#group-name :selected').text();
+			bookmark_model.save({group: group_name});
 
 			//Post on user's FB Timeline
 			FB.api(
@@ -141,6 +228,12 @@
 					}
 				}
 			);
+
+			socket.emit('addition', {'group': group_name, 'bookmark': bkmrkInfo}, function(data){});
+		},
+
+		bookmarkAdded: function(grp, bkmrk) {
+			this.groupsController.addBookmark(grp, bkmrk);
 		},
 
 		addGroup: function() {
@@ -154,6 +247,8 @@
 			var bkmrksControl = new BookmarksController(new Array());
 			bkmrksControl.bookmarks.fetch({ data: $.param({'tags': searchTerms}), success: function(){
 					bkmrksControl.showAll();
+					var suggTags = bkmrksControl.bookmarks.getTags(searchTerms);
+					suggTags.showAll();
 				} 
 			});
 		}

@@ -1,4 +1,4 @@
-module.exports = function(app, express, everyauth) {
+module.exports = function(app, express, everyauth, sessionStore) {
 	app.configure(function(){
 		app.set('views', __dirname + '/../views');
 		app.set('view engine', 'jade');
@@ -6,7 +6,7 @@ module.exports = function(app, express, everyauth) {
 		app.use(express.bodyParser());
 		app.use(express.methodOverride());
 		app.use(express.cookieParser());
-		app.use(express.session({ secret: 'cdsecret' }));
+		app.use(express.session({ secret: 'cdsecret', store: sessionStore }));
 		app.use(everyauth.middleware());
 		app.use(express.static(__dirname + '/../public'));
 		app.use(app.router);

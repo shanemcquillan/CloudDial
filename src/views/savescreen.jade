@@ -15,6 +15,7 @@ script(type='text/javascript')
 		d.getElementsByTagName('head')[0].appendChild(js);
 	}(document));
 
+	var socket = io.connectWithSession();
 	$(document).ready(function() {
 		window.app = new App();
 	});

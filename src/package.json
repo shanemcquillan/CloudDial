@@ -12,7 +12,9 @@
 		"jade": "0.20.0",
 		"jsdom": "0.2.13",
 		"mongoose": "2.5.2",
-		"request": "2.9.100"
+		"request": "2.9.100",
+		"socket.io": "0.9.4",
+		"socket.io-sessions": "0.6.1"
 	},
 	"devDependencies": {
 		"mocha": "0.14.1",

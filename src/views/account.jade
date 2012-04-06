@@ -1,6 +1,10 @@
 script
+	var socket = io.connectWithSession();
 	$(document).ready(function() {
-		var app = new App(!{groups});
+		var app = new App(!{groups});			
+		socket.on('bookmark', function (data) {
+			app.bookmarkAdded(data.group, new Bookmark(data.bookmark));
+		});
 	});
 
 #container
@@ -12,5 +16,6 @@ script
 		button#search Submit
 		div Search:
 			input#search-terms(type='text')
+		#tags
 		#groups
 		#bookmarks

@@ -10,6 +10,7 @@ module.exports = function(req, res){
 			grp.bookmarks.forEach(function(bkmrk){
 				var match = false;
 				for(var i = 0; i < tags.length; i++) {
+					match = false;
 					for(var j = 0; j < bkmrk.tags.length; j++) {
 						if(tags[i] === bkmrk.tags[j]) {
 							match = true;
@@ -19,17 +20,18 @@ module.exports = function(req, res){
 					if(!match) break;	//If any tag searched for doesn't match we stop checking the current bookmark
 				}
 				if(match) bookmarks.push(bkmrk);	//Have they all matched?
-			})
+			});
 			grp.bookmarks = bookmarks;
 			return true;
 		},
 		function(grps){
 			if(grps) {
+				//Returning all bookmarks found without considering grouping
 				var bkmrks = new Array();
 				grps.forEach(function(grp){
 					grp.bookmarks.forEach(function(bkmrk){
 						bkmrks.push(bkmrk);
-					})
+					});
 				});
 				res.send(bkmrks);
 			}
