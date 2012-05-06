@@ -10,7 +10,8 @@ module.exports = function(app, express, sessionStore) {
 
 	var sessionConnections = {}
 	socket.on('sconnection', function (client, session) {
-		if(session.auth.facebook.user.username) {
+		var username = session.auth ? session.auth.facebook.user.username | session.auth.facebook.user.id : null;
+		if(username) {
 			var username = session.auth.facebook.user.username;
 			if(!sessionConnections[username]) {
 				sessionConnections[username] = new Array();
@@ -21,9 +22,12 @@ module.exports = function(app, express, sessionStore) {
 		}
 
 		client.on('addition', function (data, fn) {
-			sessionConnections[session.auth.facebook.user.username].forEach(function(sock){
-				sock.emit('bookmark', data);
-			});
+			var username = session.auth ? session.auth.facebook.user.username | session.auth.facebook.user.id : null;
+			if(username) {
+				sessionConnections[session.auth.facebook.user.username].forEach(function(sock){
+					sock.emit('bookmark', data);
+				});
+			}
 		});
 	});
 };

@@ -8,14 +8,58 @@ script
 	});
 
 #container
-	h2 Welcome #{name}
+	#header
+		img#header-logo(src='../images/Logo_big.png')
 	#page
-		button#add-group Create new group
-		div Group name:
-			input#group-name(type='text')
-		button#search Submit
-		div Search:
-			input#search-terms(type='text')
-		#tags
-		#groups
-		#bookmarks
+		#top
+			#search-div
+				input#search-terms(type='text', placeholder='Search...')
+				span#clear-search x
+
+			ul#groups
+				-if(everyauth.user && everyauth.user.username === name)
+					li#create-group
+						a#add-group-button +
+			.clear
+		.clear
+
+		#main
+			#tags
+				.semi-important Selection tags
+				.not-important tag | amount
+				ul#selection-tags
+				.clear
+				.semi-important All tags
+				.not-important tag | amount
+				ul#all-tags
+				.clear
+
+			ul#bookmarks
+				-if(everyauth.user && everyauth.user.username === name)
+					li#create-bookmark.dial
+						img(src='../images/add_bookmark.png')
+			.clear
+		.clear
+		
+		//Group creation popup
+		-if(everyauth.user && everyauth.user.username === name)
+			div#popupContact  
+				a#popupContactClose x
+				#popup-content
+			div#backgroundPopup
+
+			#add-group-content.hidden
+				h1 Add Group
+				div Group name
+					input#group-name(type='text')
+				div Private
+					input#private-group(type='checkbox')
+				button#add-group Save
+
+			#add-bookmark-content.hidden
+				h1 Add Bookmark
+				div Bookmark URL
+					input#bookmark-address(type='text')
+				button#open-savescreen Save
+	#footer
+		a(href='/logout') Logout

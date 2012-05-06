@@ -1,7 +1,7 @@
 script(type='text/javascript')
 	window.fbAsyncInit = function() {
 		FB.init({
-			appId      : '359665827407633', // App ID
+			appId      : !{config.fb_id}, // App ID
 			status     : true, // check login status
 			cookie     : true, // enable cookies to allow the server to access the session
 			xfbml      : true  // parse XFBML
@@ -17,34 +17,50 @@ script(type='text/javascript')
 
 	var socket = io.connectWithSession();
 	$(document).ready(function() {
-		window.app = new App();
+		window.saveScreenControl = new SaveScreenController();
+		window.imgControl = new ImagesController(!{JSON.stringify(images)});
+		var tags = !{JSON.stringify(tags)};
+		var tagsWithAmounts = new Array();
+		tags.forEach(function(tg){
+			tagsWithAmounts.push({tag: tg});
+		});
+		(new TagsController(tagsWithAmounts, { el: '#suggested-tags'})).showAll();
 	});
 
-h1=title
 #page
+	img#savescreen-logo(src='../images/Logo_big.png')
 	#fb-root
-	button#add-bookmark Create new bookmark
-	div Url:
-		input#bookmark-url(type='text', value=address)
-	div Image Url:
+	input#bookmark-title(type='text', value=title)
+	.not-important#bookmark-url=address
+	br
+	#image-selection 
+		.semi-important Image
+		#current-image
+		#suggested-images
 		input#bookmark-image-url(type='text')
-		div Popular images
-			each image in pop_images
-				img(src=image)
-		div Suggested images
-			each image in goog_images
-				img(src=image)
-	div Tags:
+	.clear
+	br
+	div
+		.semi-important Tags
+		span.not-important
+			| (comma separated)
 		input#bookmark-tags(type='text')
-		div Popular tags
-			each tag in pop_tags
-				li= tag
 		div Suggested tags
-			each tag in top_tags
-				li= tag.term
-	div Private:
-		input#private-bookmark(type='checkbox')
-	div Group:
-		select#group-name
-			each name in groups
-				option= name
+		ul#suggested-tags
+		.clear
+	.clear
+	br
+	.semi-important Description
+		textarea#bookmark-desc=description
+	br
+	#save-footer
+		#priv-div.semi-important Private
+			input#private-bookmark(type='checkbox')
+		#group-name-div to
+			select#group-name
+				each name in groups
+					-if(name === sugg_group)
+						option(selected='selected')=name
+					-else
+						option=name
+		button#add-bookmark Save

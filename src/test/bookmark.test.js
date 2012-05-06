@@ -50,12 +50,10 @@ describe('Bookmarks', function(){
 		});
 	});
 
-	it('adding different representative tag', function(done){
+	it('adding user defined tag', function(done){
 		bookmark.addBookmark({'address': 'www.test.com', 'imgAddress': '', 'tags': ['test3']}, function(err){
 			bookmark.findByAddress('www.test.com', function(err, bkmrk) {
-				bkmrk._doc.tags[0].tag.should.equal('test1');
-				bkmrk._doc.tags[1].tag.should.equal('test2');
-				bkmrk._doc.tags[2].tag.should.equal('test3');					
+				bkmrk._doc.popularTags[0].tag.should.equal('test3');					
 				done();
 			});
 		});
@@ -63,9 +61,11 @@ describe('Bookmarks', function(){
 
 	it('adding the same representative tag', function(done){
 		bookmark.addBookmark({'address': 'www.test.com', 'imgAddress': '', 'tags': ['test1'] }, function(err){
-			bookmark.findByAddress('www.test.com', function(err, bkmrk) {
-				bkmrk._doc.tags[0].amount.should.equal(2);	
-				done();
+			bookmark.addBookmark({'address': 'www.test.com', 'imgAddress': '', 'tags': ['test1'] }, function(err){
+				bookmark.findByAddress('www.test.com', function(err, bkmrk) {
+					bkmrk._doc.popularTags[0].amount.should.equal(2);	
+					done();
+				});
 			});
 		});
 	});
@@ -73,7 +73,7 @@ describe('Bookmarks', function(){
 	it('returns all representative images in order of popularity', function(done){
 		bookmark.addBookmark({'address': 'www.test.com', 'imgAddress': 'www.testimage2.com', 'tags': []}, function(err){
 			bookmark.addBookmark({'address': 'www.test.com', 'imgAddress': 'www.testimage2.com', 'tags': []}, function(err){
-				bookmark.getBookmarkImages('www.test.com', function(images){
+				bookmark.getBookmarkImages('www.test.com', function(err, images){
 					images[0].should.equal('www.testimage2.com');
 					images[1].should.equal('www.testimage.com');
 					done();
@@ -82,13 +82,11 @@ describe('Bookmarks', function(){
 		});	
 	});
 
-	it('returns all representative tags in order of popularity', function(done){
+	it('returns all tags in order of popularity', function(done){
 		bookmark.addBookmark({'address': 'www.test.com', 'imgAddress': '', 'tags': ['test1', 'test2']}, function(err){
 			bookmark.addBookmark({'address': 'www.test.com', 'imgAddress': '', 'tags': ['test2', 'test3']}, function(err1){
-				bookmark.getBookmarkTags('www.test.com', function(tags){
-					tags[0].should.equal('test2');
-					tags[1].should.equal('test1');
-					tags[2].should.equal('test3');
+				bookmark.getBookmarkTags('www.test.com', function(err, tags){
+					tags.popularTags[0].should.equal('test2');
 					done();
 				});
 			});

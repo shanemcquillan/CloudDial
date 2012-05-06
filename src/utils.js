@@ -4,4 +4,13 @@ exports.arrayToString = function(array) {
 		str+=(array[i]+" ");
 	}
 	return str;
-}
+};
+
+exports.getMaxIndex = function(array) {
+	var maxIndex = 0;
+	for(var i = 1; i < array.length; i++) {
+		if(array[i] > array[maxIndex])
+			maxIndex = i;
+	}
+	return maxIndex;
+};

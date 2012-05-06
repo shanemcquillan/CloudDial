@@ -1,9 +1,7 @@
 javascript:
 (
 	function() {
-		f = 'http://localhost:4444/savescreen?title='
-			+encodeURIComponent(document.title)
-			+'&address='
+		f = 'http://localhost:4444/savescreen?address='
 			+encodeURIComponent(window.location.href);
 		a = function() {
 				if(!window.open(f,'deliciousuiv6','location=yes,links=no,scrollbars=no,toolbar=no,width=550,height=550'))

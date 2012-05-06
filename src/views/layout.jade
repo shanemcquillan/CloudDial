@@ -10,13 +10,43 @@ html
 		script(src='/socket.io/socket.io.js')
 		script(src='/socket.io/socket.io-sessions.js')
 	body!= body
-		-if(everyauth.loggedIn)
-			h3
-				a(href='/logout') Logout
+		// -if(everyauth.loggedIn)
+		// 	h3
+		// 		a(href='/logout') Logout
+
+		//Templates
 		script(type='text/template', id='bookmark-template')
-			<a href="<%= address %>"><img src="<%= imgAddress %>"/></a>
+			| <li class="dial">
+			|	<a class="dial-image" href="<%= address %>">
+			|		<% if (imgAddress) { %>
+			|			<img src="<%= imgAddress %>"/>
+			|		<% } %>
+			|	</a>
+			|	<h5><%= title %></h5>
+			|	<div class="info-bookmark">?</div>
+			|	<div class="del-bookmark">x</div>
+			|	<div class="hidden tooltip">
+			|		<img class="tooltip-arrow" src="../images/arrow.png"/>
+			|		<div class="tooltip-content">
+			|			<div class="semi-important popup-section"><%= title %></div>
+			|			<div class="popup-section"><%= description %></div>
+			|			<div><%= tags %></div>		
+			|		</div>
+			|	</div>
+			| </li>
 		script(type='text/template', id='group-template')
-			<div><%= name %></div>
+			| <li>
+			|	<a><%= name %></a>
+			| </li>
 		script(type='text/template', id='tag-template')
-			<div><%= tag %></div>
+			| <li>
+			|	<div class="tag">
+			|		<div class="co">
+			|			<span class="name"><%= tag %></span>
+			|			<div class="d"></div>
+			|			<span class="count"><%= amount %></span>
+			|	</div>
+			| </li>
+		script(type='test/template', id='image-template')
+			|	<img class='sugg-image' src="<%= address %>" />
 		script(src='/javascripts/clouddial.js')

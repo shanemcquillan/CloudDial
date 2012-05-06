@@ -1,8 +1,503 @@
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+	font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
 a {
-  color: #00B7FF;
+	color: #00B7FF;
+}
+
+ul {
+	list-style-type: none;
+}
+
+.clear {
+	/*overflow: hidden;*/
+	clear: both;
+}
+
+.hidden
+{
+	display: none;
+}
+
+.semi-important {
+	font-weight: bold;
+}
+
+/*
+ * Home page
+ */
+#page {
+	padding: 40px;
+	padding-top: 5px;
+}
+
+#home {
+	text-align: center;
+}
+
+#home #logo {
+	width: 400px;
+	padding-bottom: 30px;
+	padding-top: 30px;
+}
+
+/*
+ * Header
+ */
+#header-logo {
+	height: 50px;
+}
+
+#footer {
+   position:fixed;
+   left:0px;
+   bottom:0px;
+   height:30px;
+   width:100%;
+}
+
+#footer a {
+	float: right;
+	padding-right: 40px;
+}
+
+#bookmarklet {
+	padding-top: 100px;	
+}
+
+#bookmarklet img {
+	display: block;
+}
+
+#bookmarklet * {
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+}
+/*
+ * Form styling
+ */
+input:not([type="checkbox"]), textarea {
+	padding: 6px 10px;
+	border: 1px solid #CCC;
+	font-size: 15px;
+	outline: none;
+	color: #444;
+	font: 99% sans-serif;
+	vertical-align: middle;
+	width: 95%;
+}
+
+#bookmark-title {
+	font-weight: bold;
+	color: black;
+}
+
+.not-important {
+	color: gray;
+}
+
+/*
+ * Save screen
+ */
+#savescreen-logo {
+	width: 30%;
+}
+
+#image-selection {
+	margin: auto;
+}
+
+#current-image img {
+	width: 120px;
+	height: 120px;	/* Height scales appropriately */
+	overflow: hidden;
+	padding: 5px;
+	float: left;
+}
+
+.sugg-image {
+	height: 60px;	
+	cursor: pointer;
+}
+
+#suggested-tags {
+	list-style-type: none;
+	margin: 5px;
+	padding-right: 5px;
+	padding-left: 5px;
+}
+
+#suggested-tags .tag {
+	float: left;
+}
+
+#bookmark-desc {
+	height: 100px;
+}
+
+/*
+ * Group tabs
+ */
+#groups {
+	padding-left: 61px;
+	padding-right: 61px;
+	display: block;
+	position: relative;
+	height: auto;
+	overflow: hidden;
+	text-align: center;
+	margin-bottom: 0px;
+	padding-bottom: 0;
+	margin: 0 auto;
+	padding: 0;
+	float: left;
+}
+
+#groups li {
+	position: relative;
+	padding-left: 0px;
+	padding-right: 7px;
+	display: block;
+	float: left;
+	opacity: 1;
+	color: black;
+}
+
+#groups li a:hover {
+	box-shadow: 0px 1px 4px rgba(0,0,0,0.5);
+	opacity: 1;
+	color: black;
+}
+
+#groups li a {
+	display: block!important;
+}
+
+#groups li a {
+	text-decoration: none;
+	font-size: 17px;
+	box-shadow: 0px 1px 3px rgba(0,0,0,0.25);
+	border-radius: 2px;
+	border-color: #EEE;
+	font-family: "helvetica neue",arial,sans-serif;
+	font-weight: bold;
+	border: 0;
+	text-align: left;
+	display: block;
+	padding: 5px 12px;
+	color: #333;
+	-webkit-transition: opacity .2s ease-in-out;
+	font-size: 14px;
+	background: white;
+	font-weight: bold;
+	margin-bottom: 2px;
+	opacity: 0.85;
+	border-style: solid;
+}
+
+/*#create-group li a {
+	background: lightGrey;
+	color: white;
+}*/
+
+a, a:active, a:visited {
+	color: #233;
+	text-decoration: none;
+	cursor: pointer;
+}
+
+/*
+ * Main
+ */
+#main {
+	clear: both;
+}
+
+/*
+ * Bookmark dials
+ */
+
+.dial {
+	position: relative;
+	float: left;
+	margin: 10px 0 0 10px;
+	cursor: pointer;
+}
+
+.dial .dial-image {
+	width: 228px;
+	height: 150px;
+	overflow: hidden;
+	/*cursor: pointer;*/
+	display: block;
+	border: solid lightGrey 1px;
+}
+
+.dial .dial-image img {
+	max-width: 228px;
+	margin: auto;	
+}
+
+.dial h5 {
+	position: absolute;
+	display: inline;
+	padding: 7px 17px;
+	top: 12px;
+	left: 0;
+	font-size: 18px;
+	margin-bottom: 16px;
+	color: white;
+	background-color: #444;
+	background-color: rgba(20, 20, 20, 0.5);
+	border-top: 1px solid #333;
+	cursor: pointer;
+	/*word-break: break-word;*/
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	width: 196px;
+}
+
+.dial .del-bookmark {
+	position: absolute;
+	top: 5px;
+	right: 5px;
+	color: #bebebe;
+	cursor: pointer;
+	font-weight: bold;
+	margin-left: -20px;
+}
+
+.dial .del-bookmark:hover {
+	color: black;
+}
+
+.dial .info-bookmark {
+	position: absolute;
+	top: 5px;
+	right: 15px;
+	color: #bebebe;
+	cursor: pointer;
+	font-weight: bold;
+	margin-left: -20px;	
+}
+
+.dial .info-bookmark:hover {
+	color: black;
+}
+
+.dial .tooltip {
+	outline: none;
+	position: absolute;
+	z-index: 200;
+	top: 20px;
+	left: 203px;
+	width: 200px;
+}
+
+.dial .tooltip-content {
+	background: white;
+	border: 1px solid #8C8C8C;
+	border: 1px solid rgba(0, 0, 0, .45);
+	border-bottom: 1px solid #666;
+	-webkit-box-shadow: 0 3px 8px rgba(0, 0, 0, .3);
+	position: relative;
+	padding: 5px;
+	font-size: 12px;
+}
+
+.dial .tooltip-arrow {
+	position: relative;
+	top: 1px;
+}
+
+.dial .popup-section {
+	border-bottom:1px dotted #D3D3D3;
+}
+
+#create-bookmark {
+    height: 152px;
+    width: 230px;
+}
+
+#create-bookmark img {
+	position: absolute;
+	top: 50px;
+	left: 90px;
+	opacity: 0.5;
+	-moz-opacity: 0.5;
+	filter:alpha(opacity=5);
+}
+
+#create-bookmark:hover img {
+	opacity: 1;
+}
+
+/*
+ * Tags
+ */
+#tags {
+	float: right;
+	text-align: right;
+	/*clear: both;*/
+}
+
+.tag {
+	margin: 0 5px 5px 15px;
+	float: right;
+	background: #FDFDFD;
+	color: #333;
+	border-top: 1px solid #E9E9E9;
+	border-bottom: 1px solid lightGrey;
+	border-right: 1px solid #D6D6D6;
+	-webkit-border-radius: 0 4px 4px 0;
+	-moz-border-radius: 0 4px 4px 0;
+	border-radius: 0 4px 4px 0;
+}
+
+.tag * {
+	float: left;
+}
+
+.tag .co {
+	border-top: 1px solid #FDFDFD;
+	border-bottom: 1px solid #F8F9F9;
+	border-right: 1px solid #F9FAFA;
+	-webkit-border-radius: 0 4px 4px 0;
+	-moz-border-radius: 0 4px 4px 0;
+	border-radius: 0 4px 4px 0;
+	cursor: pointer;
+}
+
+.tag .name {
+	line-height: 17px;
+	padding: 0 6px 0 4px;
+}
+
+.tag .d {
+	height: 18px;
+	margin-top: -1px;
+	width: 0;
+	border-left: 1px solid #D6D6D6;
+}
+
+.tag .count {
+	line-height: 17px;
+	padding: 0 6px;
+}
+/*
+ * Search bar
+ */
+#search-div {
+	float: right;
+}
+
+#search-div input[type="text"] {
+  background: url(../images/search-white.png) no-repeat 10px 6px #fcfcfc;
+  border: none;
+  font: bold 12px Arial,Helvetica,Sans-serif;
+  color: #bebebe;
+  width: 150px;
+  padding: 6px 15px 6px 35px;
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  border-radius: 20px;
+  text-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+  -webkit-box-shadow: 0px 1px 3px rgba(0,0,0,0.25);
+  -moz-box-shadow: 0px 1px 3px rgba(0,0,0,0.25);
+  box-shadow: 0px 1px 3px rgba(0,0,0,0.25);
+  -webkit-transition: all 0.7s ease 0s;
+  -moz-transition: all 0.7s ease 0s;
+  -o-transition: all 0.7s ease 0s;
+  transition: all 0.7s ease 0s;
+}
+
+#search-div input[type="text"]:focus {
+  width: 200px;
+  color: black;
+  /*border-color: black;*/
+  -webkit-box-shadow: 0px 1px 4px rgba(0,0,0,0.5);
+  -moz-box-shadow: 0px 1px 4px rgba(0,0,0,0.5);
+  box-shadow: 0px 1px 4px rgba(0,0,0,0.5);
+}
+
+#search-div input[type="text"]:hover{
+  -webkit-box-shadow: 0px 1px 4px rgba(0,0,0,0.5);
+  -moz-box-shadow: 0px 1px 4px rgba(0,0,0,0.5);
+  box-shadow: 0px 1px 4px rgba(0,0,0,0.5);
+}
+
+#clear-search {
+	color: #bebebe;
+	cursor: pointer;
+	font-weight: bold;
+	margin-left: -20px;
+}
+
+#clear-search:hover {
+	color: black;
+}
+
+#add-bookmark {
+	float: right;
+}
+
+#group-name-div {
+	float: right;
+}
+
+#priv-div {
+	float: left;
+}
+
+/*
+ * Group creation popup	
+ */
+#backgroundPopup{  
+	display:none;  
+	position:fixed;  
+	_position:absolute; /* hack for internet explorer 6*/  
+	height:100%;  
+	width:100%;  
+	top:0;  
+	left:0;  
+	background:#000000;  
+	border:1px solid #cecece;  
+	z-index:1;  
+}
+
+#popupContact{  
+	display:none;  
+	position:fixed;  
+	_position:absolute; /* hack for internet explorer 6*/  
+	height:384px;  
+	width:408px;  
+	background:#FFFFFF;  
+	border:2px solid #cecece;  
+	z-index:2;  
+	padding:12px;  
+	font-size:13px;  
+} 
+
+#popupContact h1{  
+	text-align:left;  
+	color:#6FA5FD;  
+	font-size:22px;  
+	font-weight:700;  
+	border-bottom:1px dotted #D3D3D3;  
+	padding-bottom:2px;  
+	margin-bottom:20px;  
+} 
+ 
+#popupContactClose{  
+	font-size:14px;  
+	line-height:14px;  
+	right:6px;  
+	top:4px;  
+	position:absolute;  
+	color:#6fa5fd;  
+	font-weight:700;  
+	display:block;  
 }

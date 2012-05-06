@@ -1,0 +1,23 @@
+
+import junit.framework.TestCase;
+
+import org.junit.Before;
+import org.junit.Test;
+
+
+public class SummariserTest extends TestCase {
+	
+	private Summariser summariser;
+
+	@Before
+	public void setUp() throws Exception {
+		this.summariser = new Summariser();
+	}
+	
+	@Test
+	public void testSummarisingContent() {
+		
+		assertTrue(true);
+	}
+
+}

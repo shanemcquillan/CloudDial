@@ -15,11 +15,22 @@ module.exports = function(everyauth, app) {
 		})
 		.redirectPath('/');
 
-	everyauth.everymodule
-		.findUserById(function(id, callback) {
-			user.fetchUserById(id, function (err, usr) {
-				if (err) return callback(err);
-				callback(null, usr);
-			});
+	everyauth.everymodule.findUserById(function(id, callback) {
+		user.fetchUserById(id, function (err, usr) {
+			if (err) return callback(err);
+			callback(null, usr);
 		});
+	});
+
+	everyauth.everymodule.logoutPath('/logout');
+
+	everyauth.everymodule.logoutRedirectPath('/');
+
+	everyauth.everymodule.handleLogout( function (req, res) {
+		res.clearCookie('connect.sid');
+    	req.session.destroy(function() {});
+    	res.redirect('/');
+    	// req.logout();
+		// this.redirect(res, this.logoutRedirectPath());
+	});
 }

@@ -46,18 +46,8 @@ describe('Users', function(){
 	it('gets public bookmarks only', function(done){
 		user.addBookmark('test', 'home', {'address': 'www.test.com', 'imgAddress': 'www.testimage.com', 'tags': ['test1'], 'private': false}, function(err){
 			user.addBookmark('test', 'home', {'address': 'www.test2.com', 'imgAddress': 'www.testimage.com', 'tags': ['test1'], 'private': true}, function(err){
-				user.getBookmarks(
-					'test', 
-					function(grp) {
-						var bookmarks = new Array();
-						grp.bookmarks.forEach(function(bkmrk){
-							if(!bkmrk.private) {
-								bookmarks.push(bkmrk);
-							}
-						})
-						grp.bookmarks = bookmarks;
-						return !grp.private;
-					}, 
+				user.getPublicBookmarks(
+					'test',  
 					function(grps) {
 						grps[0].bookmarks.length.should.equal(1);
 						grps[0].bookmarks[0].address.should.equal('www.test.com');
@@ -69,7 +59,7 @@ describe('Users', function(){
 	});
 
 	it('adding bookmarks to other groups', function(done){
-		user.addGroup('test', 'another', function(err){
+		user.addGroup('test', {name: 'another'}, function(err){
 			user.addBookmark('test', 'home', {'address': 'www.test.com', 'imgAddress': 'www.testimage.com', 'tags': ['test1'], 'private': false}, function(err){
 				user.addBookmark('test', 'another', {'address': 'www.test2.com', 'imgAddress': 'www.testimage.com', 'tags': ['test1'], 'private': true}, function(err){
 					user.getBookmarks(
@@ -92,10 +82,10 @@ describe('Users', function(){
 	});
 
 	it('getting group names', function(done){
-		user.addGroup('test', 'another', function(err){
+		user.addGroup('test', {'name': 'another'}, function(err){
 			user.addBookmark('test', 'home', {'address': 'www.test.com', 'imgAddress': 'www.testimage.com', 'tags': ['test1'], 'private': false}, function(err){
 				user.addBookmark('test', 'another', {'address': 'www.test2.com', 'imgAddress': 'www.testimage.com', 'tags': ['test1'], 'private': true}, function(err){
-					user.getGroupNames('test', function(grpNames) {
+					user.getGroupNames('test', function(err, grpNames) {
 						grpNames[0].should.equal('home');
 						grpNames[1].should.equal('another');
 						done();

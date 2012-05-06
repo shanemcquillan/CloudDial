@@ -1,12 +1,14 @@
 {
 	"name": "clouddial",
-	"decription": "Cloud based visual bookmarking service.",
+	"description": "Cloud based visual bookmarking service.",
 	"version": "0.0.1",
 	"author": "Shane McQuillan <shanemcquillan@live.com>",
 	"private": true,
 	"dependencies": {
+		"async": "0.1.18",
 		"bindings": "0.3.0",
 		"contextify": "0.1.1",
+		"diffbot": "0.1.0",
 		"everyauth": "0.2.29",
 		"express": "2.5.2",
 		"jade": "0.20.0",

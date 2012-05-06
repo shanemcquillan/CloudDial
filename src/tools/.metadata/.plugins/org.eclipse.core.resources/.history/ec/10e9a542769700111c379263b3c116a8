@@ -1,0 +1,18 @@
+
+import junit.framework.TestCase;
+
+import org.junit.Before;
+import org.junit.Test;
+
+
+
+public class TaggerTest extends TestCase {
+	
+	private TagSuggestor tagger;
+
+	@Before
+	public void setUp() throws Exception {
+		this.tagger = new TagSuggestor("stopwords.txt");
+	}
+
+}

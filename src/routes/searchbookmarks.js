@@ -2,9 +2,12 @@ var user = require('../models/user.js');
 
 //Account page
 module.exports = function(req, res){
+	if(!req.query.tags) return;		//Sanitisation
+	
+	var showPublics = req.user && req.params.id == req.user._doc.username;
 	var tags = req.query.tags;
 	user.getBookmarks(
-		req.user._doc.username,
+		req.params.id,
 		function(grp){
 			var bookmarks = new Array();
 			grp.bookmarks.forEach(function(bkmrk){
@@ -19,7 +22,11 @@ module.exports = function(req, res){
 					}
 					if(!match) break;	//If any tag searched for doesn't match we stop checking the current bookmark
 				}
-				if(match) bookmarks.push(bkmrk);	//Have they all matched?
+				if(match) {
+					if(!bkmrk.private || showPublics) {
+						bookmarks.push(bkmrk);	//Have they all matched?
+					}
+				}
 			});
 			grp.bookmarks = bookmarks;
 			return true;
@@ -29,9 +36,11 @@ module.exports = function(req, res){
 				//Returning all bookmarks found without considering grouping
 				var bkmrks = new Array();
 				grps.forEach(function(grp){
-					grp.bookmarks.forEach(function(bkmrk){
-						bkmrks.push(bkmrk);
-					});
+					if(!grp.private || showPublics) {
+						grp.bookmarks.forEach(function(bkmrk){
+							bkmrks.push(bkmrk);
+						});
+					}
 				});
 				res.send(bkmrks);
 			}
