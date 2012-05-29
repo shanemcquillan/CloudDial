@@ -7,7 +7,7 @@ var should = require('should');
 
 describe('Bookmarks', function(){
 	beforeEach(function(done){
-		bookmark.addBookmark({'address': 'www.test.com', 'imgAddress': 'www.testimage.com', 'tags': ['test1', 'test2']}, done);
+		bookmark.addBookmark({'address': 'www.test.com', 'imgAddress': 'www.testimage.com', 'suggestedTags': ['test1', 'test2'], 'description': 'this is a test bookmark'}, done);
 	});
 
 	afterEach(function(done){
@@ -19,6 +19,8 @@ describe('Bookmarks', function(){
 		bookmark.findByAddress('www.test.com', function(err, bkmrk) {
 			bkmrk._doc.address.should.equal('www.test.com');
 			bkmrk._doc.imgAddresses[0].address.should.equal('www.testimage.com');
+			bkmrk._doc.suggestedTags.length.should.equal(2);
+			bkmrk._doc.description.should.equal('this is a test bookmark');
 			done();
 		});
 	});
@@ -34,7 +36,9 @@ describe('Bookmarks', function(){
 		bookmark.addBookmark({'address': 'www.test.com', 'imgAddress': 'www.testimage2.com', 'tags': [] }, function(err){
 			bookmark.findByAddress('www.test.com', function(err, bkmrk) {
 				bkmrk._doc.imgAddresses[0].address.should.equal('www.testimage.com');
+				bkmrk._doc.imgAddresses[0].amount.should.equal(1);
 				bkmrk._doc.imgAddresses[1].address.should.equal('www.testimage2.com');
+				bkmrk._doc.imgAddresses[1].amount.should.equal(1);
 				done();
 			});
 		});

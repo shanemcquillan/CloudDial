@@ -161,7 +161,7 @@
 		},
 
 		getAllTags: function() {
-			//Returns all tags from collection in order of popularity, excluding those in 'exclude'
+			//Returns all tags from collection in order of popularity
 			var tempTags = {};
 			this.bookmarks.forEach(function(bkmrk){
 				var tags = bkmrk.get('tags');
@@ -276,6 +276,15 @@
 			(new TagsController(tgs, {el: '#selection-tags'})).showAll();
 		},
 
+		getSelectedGroup: function() {
+			for(var i = 0; i < this.groups.length; i++) {
+				var grp = this.groups.at(i);
+				if(grp.selected) {
+					return grp.get('name');
+				}					
+			}		
+		},
+
 		getAllTags: function() {
 			var tempTags = {};
 			this.groups.forEach(function(grp){
@@ -298,7 +307,7 @@
 			}
 			tgs.sort(function(a,b){ return a.amount > b.amount ? -1 : 1 });
 
-			return tgs;			
+			return tgs;
 		},
 
 		updateAllTags: function() {
@@ -421,11 +430,15 @@
 		showAddGroupPopUp: function() {
 			$('#popup-content').html($('#add-group-content').clone().removeClass('hidden'));
 			this.setupPopup();
+			$('#group-name').val('');
+			$('#group-name').focus();
 		},
 
 		showAddBookmarkPopUp: function() {
 			$('#popup-content').html($('#add-bookmark-content').clone().removeClass('hidden'));
 			this.setupPopup();
+			$('#bookmark-address').val('');
+			$('#bookmark-address').focus();
 		},
 		
 		setupPopup: function() {
@@ -436,7 +449,9 @@
 		openSavescreen: function() {
 			var bookmarkUrl = $('#bookmark-address').val();
 			var f = 'http://localhost:4444/savescreen?address='
-				+encodeURIComponent(bookmarkUrl);
+				+ encodeURIComponent(bookmarkUrl)
+				+ '&group='
+				+ encodeURIComponent(this.groupsController.getSelectedGroup());
 			var a = function() {
 					if(!window.open(f,'deliciousuiv6','location=yes,links=no,scrollbars=no,toolbar=no,width=550,height=550'))
 						location.href = f + 'jump=yes'
@@ -459,6 +474,7 @@
 		},
 
 		addBookmark: function() {
+			$("*").css("cursor", "progress");
 			//Save to server
 			var bookmarkTitle = $('#bookmark-title').val();
 			var bookmarkUrl = $('#bookmark-url').text();
@@ -482,21 +498,18 @@
 					'/me/clouddial:add?website=' + bookmark_model.get('address'),	//Assume it's a website
 					'post',
 					function(response) {
-						if(response.error) {
-							if(response.error.code == 3502) {	//Incorrect object hack
-								var objType = response.error.message.split('\'')[1];
-								//message format 23/3: (#3502) Object at URL http://example.com/ has og:type of 'article'
-								//0:[(#3502) Object at URL http://example.com/ has og:type of ] 1:[article]
-								FB.api(
-									'/me/clouddial:add?' + objType + '=' + bookmark_model.get('address'),
-									'post',
-									function(resp){
-										finished();
-									}
-								);
-							} else {
-								finished();
-							}
+						if(response.error && response.error.code == 3502) {	//Incorrect object hack
+							var objType = response.error.message.split('\'')[1];
+							//message format 23/5: 
+							//(#3502) Object at URL http://example.com/ has og:type of 'article'
+							//0:[(#3502) Object at URL http://example.com/ has og:type of ] 1:[article]
+							FB.api(
+								'/me/clouddial:add?' + objType + '=' + bookmark_model.get('address'),
+								'post',
+								function(resp){
+									finished();
+								}
+							);
 						} else {
 							finished();
 						}
@@ -578,7 +591,9 @@
 		},
 
 		setImage: function() {
-			$('#current-image').html(this.template({'address': $('#bookmark-image-url').val() }));
+			var imgUrl = $('#bookmark-image-url').val();
+			this.currentImage = imgUrl;
+			$('#current-image').html(this.template({'address': imgUrl}));
 		}
 	});
 

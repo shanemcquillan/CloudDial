@@ -113,7 +113,7 @@ var User = function() {
 					return !grp.private;	
 				},
 				callback
-			)
+			);
 		},
 
 		getGroup: function(username, group, callback) {
@@ -156,16 +156,16 @@ var User = function() {
 			});
 		},
 
-		findOrCreateByUidAndNetwork: function(uid, network, profile, promise, callback) {
-			model.findOne({uid: uid, network: network}, function(err, usr){
+		findOrCreateByUidAndNetwork: function(profile, promise, callback) {
+			model.findOne({uid: profile.id, network: profile.network}, function(err, usr){
 				if(err) throw err;
 				if(usr) {
 					promise.fulfill(usr);
 				} else {
 					var newUsr = new model();
-					newUsr.network = network;
-					newUsr.uid = uid;
-					newUsr.username = profile.username || uid;
+					newUsr.network = profile.network;
+					newUsr.uid = profile.id;
+					newUsr.username = profile.username || profile.id;
 					newUsr.groups = [{name: 'home', bookmarks: [], isDefault: true, private: false}];	//Default group
 					newUsr.save(function(err){
 						if (err) throw err;
@@ -187,11 +187,11 @@ var User = function() {
 		removeBookmark: function(username, group, bkmrk, callback) {
 			this.findUserByUsername(username, function(err, usr) {
 				var removed = false;
-				for(var i = 0; i < usr._doc.groups.length; i++) {
-					if(usr._doc.groups[i].name = group) {
-						for(var j = 0; j < usr._doc.groups[i].bookmarks.length; j++) {
-							if(usr._doc.groups[i].bookmarks[j].address == bkmrk.address) {
-								usr._doc.groups[i].bookmarks.splice(j,1);
+				for(var i = 0; i < usr._doc.groups.length; i++) {	//Iterate over groups
+					if(usr._doc.groups[i].name === group) {			//Until correct group is found
+						for(var j = 0; j < usr._doc.groups[i].bookmarks.length; j++) {			//Iterate over bookmarks
+							if(usr._doc.groups[i].bookmarks[j].address === bkmrk.address) {		//Until correct is found
+								usr._doc.groups[i].bookmarks.splice(j,1);	//Remove it
 								removed = true;
 								break;
 							}

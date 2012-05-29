@@ -31,6 +31,10 @@ public class SuggestorThread extends Thread {
 			String summary = summariser.summarise(body, title, 1);
 			
 			TagSuggestor tagSugg = new TagSuggestor("stopwords.txt");
+			String modifiedBody = body;
+			for(int i = 0; i < 10; i++) {	//Extra weighting to title
+				modifiedBody+=title;
+			}
 			TopTermsList tags = tagSugg.suggest(body, title, 10);
 			
 			JSONStringer stringer = new JSONStringer();

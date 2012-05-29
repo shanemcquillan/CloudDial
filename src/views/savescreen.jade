@@ -35,8 +35,9 @@ script(type='text/javascript')
 	br
 	#image-selection 
 		.semi-important Image
-		#current-image
+		#current-image.dial-image
 		#suggested-images
+		.clear
 		input#bookmark-image-url(type='text')
 	.clear
 	br
@@ -63,4 +64,4 @@ script(type='text/javascript')
 						option(selected='selected')=name
 					-else
 						option=name
-		button#add-bookmark Save
+		#add-bookmark.button Save

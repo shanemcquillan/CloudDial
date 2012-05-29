@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testrun name="TaggerTest" project="Suggestions" tests="3" started="3" failures="0" errors="0" ignored="0">
+  <testsuite name="TaggerTest" time="0.912">
+    <testcase name="testTaggingContent" classname="TaggerTest" time="0.904"/>
+    <testcase name="testShortContent" classname="TaggerTest" time="0.004"/>
+    <testcase name="testNothing" classname="TaggerTest" time="0.004"/>
+  </testsuite>
+</testrun>

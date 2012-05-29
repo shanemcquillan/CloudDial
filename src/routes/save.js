@@ -41,20 +41,23 @@ exports.saveScreen = function(req, res) {
 					},
 					suggestedImages: function(callback){
 						var terms = new Array();
-						var numTags = tags.length > 0 ? (tags.length > 3 ? 3 : tags.length) : 0;
-						
-						if(numTags == 0) {	//If we've no suggested tags simply search the title
+						if(page.title) {
 							terms = page.title.split(' ');
-							numTags = terms.length;
+						} else {
+							var numTags = tags.length > 0 ? (tags.length > 3 ? 3 : tags.length) : 0;
+							for(var i = 0; i < numTags; i++){
+								terms.push(tags[i]);
+							}
 						}
 
-						for(var i = 0; i < numTags; i++){
-							terms.push(tags[i]);
-						} 
 						google_images.getImageUrls(terms, callback);
 					},
 					suggestedGroup: function(callback){
-						suggestGroup(req.user._doc.username, tags, callback);
+						if(!req.query.group) {
+							suggestGroup(req.user._doc.username, tags, callback);
+						} else {
+							callback(null, req.query.group);
+						}
 					},
 					description: function(callback){
 						bookmark.getBookmarkDescription(req.query.address, callback);
@@ -70,7 +73,7 @@ exports.saveScreen = function(req, res) {
 							'groups': results.groupNames,
 							'images': mergeWithoutDups(results.popularImages, results.inlineImages, results.suggestedImages).splice(0,10),
 							'tags': tags.splice(0,10),
-							'sugg_group': results.suggestGroup,
+							'sugg_group': results.suggestedGroup,
 							'description': (page.summary ? page.summary : results.description)
 						}
 					);

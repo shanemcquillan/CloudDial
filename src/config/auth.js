@@ -5,9 +5,9 @@ module.exports = function(everyauth, app) {
 		.appId(config.fb_id)
 		.appSecret(config.fb_secret)
 		.scope('publish_actions')
-		.findOrCreateUser(function (session, accessToken, accessTokenExtra, fbUserMetadata) {
+		.findOrCreateUser(function (session, accessToken, accessTokenExtra, profile) {
 			var promise = this.Promise();
-			user.findOrCreateByUidAndNetwork(fbUserMetadata.id, 'facebook', fbUserMetadata, promise, function(){});
+			user.findOrCreateByUidAndNetwork(profile, promise, function(){});
 			return promise;
 		})
 		.moduleErrback(function(err){
@@ -30,7 +30,5 @@ module.exports = function(everyauth, app) {
 		res.clearCookie('connect.sid');
     	req.session.destroy(function() {});
     	res.redirect('/');
-    	// req.logout();
-		// this.redirect(res, this.logoutRedirectPath());
 	});
 }

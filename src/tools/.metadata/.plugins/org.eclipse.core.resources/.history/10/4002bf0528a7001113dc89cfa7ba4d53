@@ -30,8 +30,9 @@ public class TagSuggestor {
 	}
 
 	public TopTermsList suggest(String body, String title, int amount) throws IOException {
+		String modBody = body;
 		for(int i = 0; i < TITLE_WEIGHT; i++) {
-			body+=title;
+			modBody+=title;
 		}
 		
 		Document doc = new Document();
