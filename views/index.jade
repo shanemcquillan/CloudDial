@@ -6,7 +6,7 @@
 				img(src='../images/connect_facebook.png')
 	#bookmarklet
 		img(src='../images/arrow_up_drawn.png')
-		a(title='Save on Cloud Dial', href="javascript:(function(){f='http://localhost:4444/savescreen?address='+encodeURIComponent(window.location.href);a=function(){if(!window.open(f,'deliciousuiv6','location=yes,links=no,scrollbars=no,toolbar=no,width=550,height=550'))location.href=f+'jump=yes'};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})()")
+		a(title='Save on Cloud Dial', href="javascript:(function(){f='http://clouddial.herokuapp.com/savescreen?address='+encodeURIComponent(window.location.href);a=function(){if(!window.open(f,'deliciousuiv6','location=yes,links=no,scrollbars=no,toolbar=no,width=550,height=550'))location.href=f+'jump=yes'};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})()")
 			img(src='../images/button_bookmarklet.png', alt='Save on Cloud Dial')
 		p Drag me into your toolbar!
 		.not-important(style='font-size: 10px')

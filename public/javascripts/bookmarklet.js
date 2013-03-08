@@ -1,7 +1,7 @@
 javascript:
 (
 	function() {
-		f = 'http://localhost:4444/savescreen?address='
+		f = 'http://clouddial.herokuapp.com/savescreen?address='
 			+encodeURIComponent(window.location.href);
 		a = function() {
 				if(!window.open(f,'_blank','location=yes,links=no,scrollbars=no,toolbar=no,width=550,height=550'))

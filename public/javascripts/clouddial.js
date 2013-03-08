@@ -448,7 +448,7 @@
 
 		openSavescreen: function() {
 			var bookmarkUrl = $('#bookmark-address').val();
-			var f = 'http://localhost:4444/savescreen?address='
+			var f = 'http://clouddial.herokuapp.com/savescreen?address='
 				+ encodeURIComponent(bookmarkUrl)
 				+ '&group='
 				+ encodeURIComponent(this.groupsController.getSelectedGroup());
