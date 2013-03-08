@@ -3,9 +3,9 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="tests"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
-	<classpathentry kind="lib" path="C:/Users/Shane/CloudDial/src/tools/Suggestions/Classifier4J-0.6.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Shane/CloudDial/src/tools/Suggestions/lucene-core-3.5.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Shane/CloudDial/src/tools/Suggestions/commons-codec-1.6.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Shane/CloudDial/src/tools/Suggestions/junit-4.10.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Shane/Desktop/Dropbox/Cloud Dial/tools/Suggestions/Classifier4J-0.6.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Shane/Desktop/Dropbox/Cloud Dial/tools/Suggestions/commons-codec-1.6.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Shane/Desktop/Dropbox/Cloud Dial/tools/Suggestions/junit-4.10.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Shane/Desktop/Dropbox/Cloud Dial/tools/Suggestions/lucene-core-3.5.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
