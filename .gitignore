@@ -1,8 +1,7 @@
 !.gitignore
-src/node_modules/
-src/tools/.metadata/
-src/tools/Suggestions/.settings/
-src/tools/Suggestions/bin/
-src/tools/Suggestions/.classpath
-src/tools/Suggestions/.project
-src/tools/Suggestions/*.jar
+tools/.metadata/
+tools/Suggestions/.settings/
+tools/Suggestions/bin/
+tools/Suggestions/.classpath
+tools/Suggestions/.project
+tools/Suggestions/*.jar

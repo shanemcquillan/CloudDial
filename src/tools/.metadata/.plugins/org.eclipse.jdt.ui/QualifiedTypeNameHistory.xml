@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<qualifiedTypeNameHistroy>
-<fullyQualifiedTypeName name="net.sf.classifier4J.summariser.ISummariser"/>
-<fullyQualifiedTypeName name="net.sf.classifier4J.summariser.SimpleSummariser"/>
-<fullyQualifiedTypeName name="org.apache.commons.lang3.StringEscapeUtils"/>
-<fullyQualifiedTypeName name="org.apache.commons.codec.binary.Base64"/>
-<fullyQualifiedTypeName name="JSONObject"/>
-</qualifiedTypeNameHistroy>
