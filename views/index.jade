@@ -1,9 +1,24 @@
+script
+	$(document).ready(function() {
+		$("#submit-button").click(function(){
+			$.post('/login', {'username': $("#username").val(), 'password': $("#password").val()}, function(data){
+					document.location.reload(true);
+				});
+		});
+	});
+
 #home
 	img#logo(src='../images/logo_big.png')
-	#fb-login.fb_button(style='background-position: left -188px')
-		a.fb_button_medium(href='/auth/facebook')
-			span#fb_login_text.fb_button_text
-				img(src='../images/connect_facebook.png')
+	//- #fb-login.fb_button(style='background-position: left -188px')
+	//- 	a.fb_button_medium(href='/auth/facebook')
+	//- 		span#fb_login_text.fb_button_text
+	//- 			img(src='../images/connect_facebook.png')
+	div Username
+	input#username(type='text')
+	div Password
+	input#password(type='password')
+	button#submit-button Submit
+
 	#bookmarklet
 		img(src='../images/arrow_up_drawn.png')
 		a(title='Save on Cloud Dial', href="javascript:(function(){f='http://clouddial.herokuapp.com/savescreen?address='+encodeURIComponent(window.location.href);a=function(){if(!window.open(f,'deliciousuiv6','location=yes,links=no,scrollbars=no,toolbar=no,width=550,height=550'))location.href=f+'jump=yes'};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})()")

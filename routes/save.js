@@ -82,7 +82,7 @@ exports.saveScreen = function(req, res) {
 		});
 	}
 
-	if(req.loggedIn) {
+	if(req.user) {
 		bookmark.exists(req.query.address, function(err, exists){
 			page_parser.getPage(req.query.address, function(err, page){
 				if(!exists) {	//Adding bookmark for first time

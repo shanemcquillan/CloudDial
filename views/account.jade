@@ -17,7 +17,7 @@ script
 				span#clear-search x
 
 			ul#groups
-				-if(everyauth.user && everyauth.user.username === name)
+				-if(username && username === name)
 					li#create-group
 						a#add-group-button +
 			.clear
@@ -35,14 +35,14 @@ script
 				.clear
 
 			ul#bookmarks
-				-if(everyauth.user && everyauth.user.username === name)
+				-if(username && username === name)
 					li#create-bookmark.dial
 						img(src='../images/add_bookmark.png')
 			.clear
 		.clear
 		
 		//Group creation popup
-		-if(everyauth.user && everyauth.user.username === name)
+		-if(username && username === name)
 			div#popupContact  
 				a#popupContactClose x
 				#popup-content

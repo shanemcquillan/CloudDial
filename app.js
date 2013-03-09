@@ -1,6 +1,7 @@
 var express = require('express'),		
-	mongoose = require('mongoose'),
-	everyauth = require('everyauth'); everyauth.debug = true;
+	mongoose = require('mongoose');
+	//everyauth = require('everyauth'); everyauth.debug = true;
+passport = require('passport');
 
 config = require('./config/config.json');		//NOTE: Global variable.
 
@@ -11,8 +12,8 @@ sessionStore = new MemoryStore();
 
 mongoose.connect('mongodb://' + config.db_ip + '/' + config.db_name);
 
-require('./config/auth.js')(everyauth);
-require('./config/environment.js')(app, express, everyauth, sessionStore);
+require('./config/auth.js')(passport);
+require('./config/environment.js')(app, express, passport, sessionStore);
 require('./config/routes.js')(app);
 require('./realtime/bookmark.js')(app, express, sessionStore);
 
