@@ -10,7 +10,7 @@
 		"contextify": "0.1.1",
 		"diffbot": "0.1.0",
 		"passport": "0.2.3",
-		"passport-local": "0.2.3",
+		"passport-local": ">=0.0.0",
 		"express": "2.5.2",
 		"jade": "0.20.0",
 		"jsdom": "0.2.13",
