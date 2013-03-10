@@ -13,6 +13,9 @@ module.exports = function(passport, app) {
   		});
 	});
 
+	var usr = { username: 'shane', password: 'pass' };
+	user.findOrCreateUser(usr, function(){});
+
 	passport.use(new LocalStrategy(function(username, password, done) {
 		user.findUserByUsername(username, function(err, user) {
 			if (err) { 

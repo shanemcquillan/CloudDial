@@ -4,7 +4,6 @@ var User = function() {
 	var Schema = mongoose.Schema;
 
 	var UserSchema = new Schema({
-		uid: {'type': String, 'required': true},   
 		username: {'type': String, 'required': true, 'unique': true},
     	//email: { type: String, required: true, unique: true },
     	password: { type: String, required: true},
@@ -165,25 +164,21 @@ var User = function() {
 			});
 		},
 
-		// findOrCreateByUidAndNetwork: function(profile, promise, callback) {
-		// 	model.findOne({uid: profile.id, network: profile.network}, function(err, usr){
-		// 		if(err) throw err;
-		// 		if(usr) {
-		// 			promise.fulfill(usr);
-		// 		} else {
-		// 			var newUsr = new model();
-		// 			newUsr.network = profile.network;
-		// 			newUsr.uid = profile.id;
-		// 			newUsr.username = profile.username || profile.id;
-		// 			newUsr.groups = [{name: 'home', bookmarks: [], isDefault: true, private: false}];	//Default group
-		// 			newUsr.save(function(err){
-		// 				if (err) throw err;
-		// 				promise.fulfill(newUsr);
-		// 			});
-		// 		}
-		// 		callback();
-		// 	});
-		// },
+		findOrCreateUser: function(user, callback) {
+			model.findOne({username: user.username}, function(err, usr){
+				if(err) throw err;
+				if(!usr) {
+					var newUsr = new model();
+					newUsr.username = user.username;
+					newUsr.password = user.password;
+					newUsr.groups = [{name: 'home', bookmarks: [], isDefault: true, private: false}];	//Default group
+					newUsr.save(function(err){
+						if (err) throw err;
+					});
+				}
+				callback();
+			});
+		},
 
 		comparePassword: function(candidatePassword, callback) {
 			model.comparePassword(candidatePassword, callback);
