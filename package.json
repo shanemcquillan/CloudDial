@@ -7,7 +7,6 @@
 	"dependencies": {
 		"async": "0.1.18",
 		"bindings": "0.3.0",
-		"contextify": "0.1.1",
 		"diffbot": "0.1.0",
 		"passport": "*",
 		"passport-local": ">=0.0.0",
