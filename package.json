@@ -12,7 +12,7 @@
 		"passport-local": ">=0.0.0",
 		"express": "2.5.2",
 		"jade": "0.20.0",
-		"jsdom": "0.2.13",
+		"jsdom": "*",
 		"mongoose": "2.5.2",
 		"request": "2.9.100",
 		"socket.io": "0.9.4",
