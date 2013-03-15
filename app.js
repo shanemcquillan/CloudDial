@@ -18,5 +18,6 @@ require('./config/environment.js')(app, express, passport, sessionStore);
 require('./config/routes.js')(app);
 require('./realtime/bookmark.js')(app, express, sessionStore);
 
-app.listen(process.env.PORT || config.port);
-console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
+var port = process.env.PORT || config.port
+app.listen(port);
+console.log("Express server listening on port %d in %s mode", port, app.settings.env);
