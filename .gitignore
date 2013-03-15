@@ -5,3 +5,4 @@ tools/Suggestions/bin/
 tools/Suggestions/.classpath
 tools/Suggestions/.project
 tools/Suggestions/*.jar
+node_modules/
